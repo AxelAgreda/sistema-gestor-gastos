@@ -1,0 +1,3 @@
+# El sistema solo usa la biblioteca estándar de Python 3.11+.
+# pytest se usa únicamente para ejecutar las pruebas.
+pytest>=8.0
