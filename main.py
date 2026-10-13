@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from pathlib import Path
 
 from gestor_gastos.consola.menu import MenuConsola
@@ -20,6 +21,12 @@ from gestor_gastos.servicios.respaldo import RespaldoAutomatico
 
 
 def main() -> None:
+    # Algunas consolas de Windows (o la de un IDE) no usan UTF-8 y fallan con los
+    # iconos y emoji del historial; así el programa funciona en cualquiera.
+    for flujo in (sys.stdout, sys.stderr):
+        if hasattr(flujo, "reconfigure"):
+            flujo.reconfigure(encoding="utf-8", errors="replace")
+
     parser = argparse.ArgumentParser(description="Gestor de gastos compartidos")
     parser.add_argument("--demo", action="store_true", help="ejecuta la demostración")
     parser.add_argument("--datos", default="datos", help="carpeta de datos")
