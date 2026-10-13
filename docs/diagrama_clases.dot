@@ -1,0 +1,85 @@
+digraph UML {
+  graph [rankdir=BT, splines=spline, nodesep=0.45, ranksep=0.7, fontname="Helvetica", bgcolor="white", pad=0.3];
+  node  [shape=plain, fontname="Helvetica", fontsize=10];
+  edge  [fontname="Helvetica", fontsize=9];
+
+  Movimiento [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#eef2f7">
+    <tr><td><i>«abstract»</i></td></tr><tr><td><b><i>Movimiento</i></b></td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">- __id: int<br/># _monto: Decimal<br/>+ usuario: Usuario<br/>+ categoria: Categoria<br/>+ descripcion: str<br/>+ fecha: date<br/>+ metodo_pago: str</td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ <i>efecto_en_balance(): Decimal</i><br/>+ <i>icono(): str</i><br/>+ resumen(): str<br/>+ aplicar_en(pote: PoteDeAhorro)<br/>+ cuenta_para_presupuesto(): bool<br/>+ <u>desde_dict(datos, ...): Movimiento</u><br/>+ __eq__(otro) / __hash__()</td></tr></table>>];
+
+  Serializable [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#f7f2e6">
+    <tr><td><i>«mixin»</i></td></tr><tr><td><b>SerializableMixin</b></td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ a_dict(): dict<br/># _datos(): dict</td></tr></table>>];
+
+  Recurrente [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#f7f2e6">
+    <tr><td><i>«mixin»</i></td></tr><tr><td><b>RecurrenteMixin</b></td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ dia_cobro: int</td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ proxima_fecha(desde): date<br/>+ resumen(): str</td></tr></table>>];
+
+  Gasto   [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#eef2f7"><tr><td><b>Gasto</b></td></tr><tr><td align="left" balign="left" bgcolor="white">+ efecto_en_balance()<br/>+ icono()<br/>+ cuenta_para_presupuesto()</td></tr></table>>];
+  Ingreso [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#eef2f7"><tr><td><b>Ingreso</b></td></tr><tr><td align="left" balign="left" bgcolor="white">+ periodo_pago: str</td></tr><tr><td align="left" balign="left" bgcolor="white">+ efecto_en_balance()<br/>+ icono()<br/>+ resumen()</td></tr></table>>];
+  Ahorro  [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#eef2f7"><tr><td><b>Ahorro</b></td></tr><tr><td align="left" balign="left" bgcolor="white">+ efecto_en_balance()<br/>+ icono()<br/>+ aplicar_en(pote)</td></tr></table>>];
+  Retiro  [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#eef2f7"><tr><td><b>Retiro</b></td></tr><tr><td align="left" balign="left" bgcolor="white">+ efecto_en_balance()<br/>+ icono()<br/>+ aplicar_en(pote)</td></tr></table>>];
+  GastoRecurrente [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#eef2f7"><tr><td><b>GastoRecurrente</b></td></tr><tr><td align="left" balign="left" bgcolor="white">+ icono()</td></tr></table>>];
+
+  Usuario [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#eef7ee"><tr><td><b>Usuario</b></td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">- __id: int<br/>+ nombre: str<br/># _activo: bool</td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ desactivar()<br/>+ reactivar()</td></tr></table>>];
+  Categoria [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#eef7ee"><tr><td><b>Categoria</b></td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ nombre: str<br/>+ emoji: str<br/>+ tipos: frozenset<br/>+ limite_mensual: Decimal</td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ permite(tipo): bool</td></tr></table>>];
+  Periodo [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#f3eef7"><tr><td><i>«dataclass»</i></td></tr><tr><td><b>Periodo</b></td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ anio: int<br/>+ mes: int</td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ contiene(fecha): bool</td></tr></table>>];
+
+  Billetera [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#fdeaea"><tr><td><b>Billetera</b></td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ nombre: str<br/>- __usuarios: dict<br/>- __categorias: dict<br/>- __movimientos: list<br/>- __pote: PoteDeAhorro<br/># _repositorio: Repositorio<br/># _notificador: Notificador</td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ registrar(*movimientos)<br/>+ filtrar(tipo=None, **criterios)<br/>+ eliminar(id_mov)<br/>+ balance(periodo=None): Decimal<br/>+ guardar() / cargar()</td></tr></table>>];
+  Pote [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#fdeaea"><tr><td><b>PoteDeAhorro</b></td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">- __saldo: Decimal</td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ depositar(monto)<br/>+ retirar(monto)</td></tr></table>>];
+
+  Notificador [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#e8f4fb"><tr><td><i>«interface»</i></td></tr><tr><td><b>Notificador</b></td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ enviar(destinatario, mensaje)</td></tr></table>>];
+  Repositorio [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#e8f4fb"><tr><td><i>«interface»</i></td></tr><tr><td><b>Repositorio</b></td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ guardar(datos)<br/>+ cargar(): dict</td></tr></table>>];
+  NConsola [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3"><tr><td><b>NotificadorConsola</b></td></tr></table>>];
+  NArchivo [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3"><tr><td><b>NotificadorArchivo</b></td></tr></table>>];
+  RJSON [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3"><tr><td><b>RepositorioJSON</b></td></tr></table>>];
+  RMem  [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3"><tr><td><b>RepositorioMemoria</b></td></tr></table>>];
+
+  Reportes [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#fff6dd"><tr><td><b>GeneradorReportes</b></td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ generar(periodo): list</td></tr></table>>];
+  Respaldo [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3" bgcolor="#fff6dd"><tr><td><b>RespaldoAutomatico</b></td></tr>
+    <tr><td align="left" balign="left" bgcolor="white">+ run()<br/>+ respaldar(): Path<br/>+ detener()</td></tr></table>>];
+  Thread [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="3"><tr><td><b>threading.Thread</b></td></tr></table>>];
+
+  // herencia (triángulo vacío)
+  edge [arrowhead=onormal];
+  Gasto -> Movimiento; Ingreso -> Movimiento; Ahorro -> Movimiento; Retiro -> Movimiento;
+  Movimiento -> Serializable;
+  GastoRecurrente -> Gasto; GastoRecurrente -> Recurrente;
+  Respaldo -> Thread;
+  // realización de interfaces (línea punteada)
+  edge [style=dashed, arrowhead=onormal];
+  NConsola -> Notificador; NArchivo -> Notificador; RJSON -> Repositorio; RMem -> Repositorio;
+  // composición (rombo relleno del lado del todo)
+  edge [style=solid, arrowhead=none, arrowtail=diamond, dir=back];
+  Billetera -> Pote [taillabel="1", headlabel="1"];
+  // agregación (rombo vacío)
+  edge [arrowtail=odiamond];
+  Billetera -> Movimiento [headlabel="0..*"];
+  Billetera -> Usuario [headlabel="0..*"];
+  Billetera -> Categoria [headlabel="0..*"];
+  // asociaciones y dependencias
+  edge [arrowtail=none, dir=forward, arrowhead=vee];
+  Movimiento -> Usuario [label="registra"];
+  Movimiento -> Categoria [label="pertenece a"];
+  edge [style=dashed, arrowhead=vee];
+  Billetera -> Notificador [label="usa"];
+  Billetera -> Repositorio [label="usa"];
+  Movimiento -> Periodo [label="usa"];
+  Reportes -> Billetera [label="lee"];
+  Respaldo -> Billetera [label="respalda"];
+}
