@@ -1,9 +1,9 @@
 # Gestor de gastos compartidos
 
-Sistema de consola en Python para registrar gastos, ingresos, ahorros y retiros de ahorro entre
-varios usuarios. Es el examen práctico integrador de **Programación Orientada a Objetos (LC627)**
-de la Universidad CETEC de México y se basa en una app real que construí con Google Apps Script
-y Google Sheets.
+Sistema de consola en Python para llevar los gastos, ingresos, ahorros y retiros de ahorro de varias
+personas. Lo hice como examen práctico integrador de Programación Orientada a Objetos (LC627) en la
+Universidad CETEC de México. La idea viene de una app que ya uso con mi pareja, hecha con Google Apps
+Script y Google Sheets; aquí pasé ese mismo modelo a clases de Python.
 
 **Autor:** Edwin Axel Agreda Hernández
 
@@ -31,8 +31,9 @@ python main.py --demo    # demostración guiada de todos los requisitos del exam
 python -m pytest -v      # ejecuta las 40 pruebas automatizadas
 ```
 
-La primera vez que se abre el menú, el sistema carga datos de ejemplo de octubre de 2026.
-Mientras el menú está abierto, un hilo guarda un respaldo cada 2 minutos en `datos/respaldos/`.
+Si es la primera vez que abres el menú y no hay datos guardados, el sistema carga unos datos de
+ejemplo de octubre de 2026. Mientras el menú está abierto, un hilo hace un respaldo cada 2 minutos en
+`datos/respaldos/`.
 
 ## Estructura
 
